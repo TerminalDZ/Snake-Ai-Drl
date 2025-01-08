@@ -8,6 +8,8 @@ from collections import deque  # قائمة ذات طرفين لتخزين ال�
 import pygame  # مكتبة لإنشاء الألعاب والرسومات
 import time  # للتحكم في التوقيت
 import threading  # للتعامل مع المهام المتوازية
+import matplotlib.pyplot as plt
+
 
 # تعريف الألوان المستخدمة في اللعبة باستخدام نظام RGB
 BLACK = (0, 0, 0)  # اللون الأسود
@@ -70,6 +72,41 @@ class SharedMemory:
             self.training_data['epsilon'].append(epsilon)  # إضافة Epsilon
             self.training_data['losses'].append(loss)  # إضافة الخسائر
             self.training_data['avg_rewards'].append(avg_reward)  # إضافة متوسط المكافآت
+
+def plot_training_data(shared_memory):
+    """Plot the training metrics including scores, epsilon values, losses, and average rewards."""
+    plt.figure(figsize=(15, 10))
+    
+    # مخطوطات للنقاط والقيمة Epsilon والخسائر ومتوسط المكافآت
+    plt.subplot(2, 2, 1)
+    plt.plot(shared_memory.training_data['scores'])
+    plt.title('Snake Scores over Time')
+    plt.xlabel('Episode')
+    plt.ylabel('Score')
+    
+    # مخطوطات لقيمة Epsilon
+    plt.subplot(2, 2, 2)
+    plt.plot(shared_memory.training_data['epsilon'])
+    plt.title('Epsilon over Time')
+    plt.xlabel('Episode')
+    plt.ylabel('Epsilon')
+    
+    # مخطوطات للخسائر
+    plt.subplot(2, 2, 3)
+    plt.plot(shared_memory.training_data['losses'])
+    plt.title('Loss over Time')
+    plt.xlabel('Episode')
+    plt.ylabel('Loss')
+    
+    # مخطوطات لمتوسط المكافآت
+    plt.subplot(2, 2, 4)
+    plt.plot(shared_memory.training_data['avg_rewards'])
+    plt.title('Average Reward over Time')
+    plt.xlabel('Episode')
+    plt.ylabel('Average Reward')
+    
+    plt.tight_layout()
+    plt.show()
 
 # تعريف لعبة الأفعى
 class SnakeGame:
@@ -378,8 +415,11 @@ class MultiSnakeTrainer:
                 
         finally:
             pygame.quit()  # إغلاق Pygame
+            plot_training_data(self.shared_memory)  # عرض بيانات التدريب
 
 # بدء التدريب
 if __name__ == "__main__":
     trainer = MultiSnakeTrainer()  # إنشاء المدرب
+
+   
     trainer.train()  # بدء التدريب
