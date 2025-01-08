@@ -39,9 +39,13 @@ cd snake-ai-drl
 python singal.py
 ```
 
-3. Run the parallel training with multiple agents:
+3. Run the parallel training with multiple agents  and analytics:
 ```bash
 python game.py
+```
+Or run the parallel training with multiple agents:
+```bash
+python multi.py
 ```
 
 ## 🎮 Game Environment
